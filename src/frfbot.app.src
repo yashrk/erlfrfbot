@@ -1,0 +1,15 @@
+{application, frfbot,
+ [
+  {description, "FreeFeed.net bot"},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { frfbot_app, []}},
+  {env, [
+         {feed, "<YOUR FEED HERE>"},
+         {password, "<YOUR PASSWORD HERE>"}
+        ]}
+ ]}.
