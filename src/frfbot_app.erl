@@ -22,4 +22,5 @@ init() ->
     application:start(crypto),
     application:start(public_key),
     application:start(ssl),
-    application:start(jiffy).
+    application:start(jiffy),
+    application:start(erlcron).
