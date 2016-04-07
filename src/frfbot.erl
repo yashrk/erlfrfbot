@@ -5,7 +5,9 @@
 %% API
 -export([start_link/0,
          login/0,
-         post/1]).
+         post/1,
+         is_logged_in/0
+        ]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -33,6 +35,9 @@ login() ->
 
 post(Text) ->
     gen_server:call(?MODULE, {post, Text}).
+
+is_logged_in() ->
+    gen_server:call(?MODULE, {is_logged_in}).
 
 %%%===================================================================
 %%% gen_server callbacks
@@ -72,6 +77,8 @@ handle_call({login}, _From, State) ->
 handle_call({post, Text}, _From, State) ->
     Status = post(Text, State),
     {reply, Status, State};
+handle_call({is_logged_in}, _From, State) ->
+    {reply, State#state.logged_in, State};
 handle_call(_Request, _From, State) ->
     {reply, unknown_command, State}.
 
