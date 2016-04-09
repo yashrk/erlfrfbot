@@ -5,7 +5,7 @@
 %% API
 -export([start_link/0,
          login/0,
-         post/1,
+         post/2,
          is_logged_in/0
         ]).
 
@@ -33,8 +33,8 @@ start_link() ->
 login() ->
     gen_server:call(?MODULE, {login}).
 
-post(Text) ->
-    gen_server:call(?MODULE, {post, Text}).
+post(Feed, Text) ->
+    gen_server:call(?MODULE, {post, Feed, Text}).
 
 is_logged_in() ->
     gen_server:call(?MODULE, {is_logged_in}).
@@ -74,8 +74,8 @@ init([]) ->
 handle_call({login}, _From, State) ->
     {Status, NewState} = get_token(State),
     {reply, Status, NewState};
-handle_call({post, Text}, _From, State) ->
-    Status = post(Text, State),
+handle_call({post, Feed, Text}, _From, State) ->
+    Status = post(Feed, Text, State),
     {reply, Status, State};
 handle_call({is_logged_in}, _From, State) ->
     {reply, State#state.logged_in, State};
@@ -156,16 +156,16 @@ get_token(State) ->
     #{<<"authToken">> := Token} = ResponseMap,
     {ok, State#state{logged_in=true, token=Token}}.
 
-post(Post, State) ->
-    {ok, Feed} = application:get_env(frfbot, feed),
-    FeedBin = list_to_binary(Feed),
+post(Feed, Post, State) ->
+    {ok, User} = application:get_env(frfbot, feed),
+    UserBin = list_to_binary(User),
     Token = State#state.token,
     Request = #{
         <<"post">> => #{
             <<"body">> => Post
         },
         <<"meta">> => #{
-            <<"feeds">> => FeedBin
+            <<"feeds">> => Feed
         }
     },
     RequestJSON = jiffy:encode(Request),

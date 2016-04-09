@@ -1,5 +1,5 @@
 -module(utils).
--export([russian_month/1, post_current_date/0]).
+-export([russian_month/1, post_current_date/1]).
 
 russian_month(1)->
     <<"января"/utf8>>;
@@ -26,10 +26,10 @@ russian_month(11)->
 russian_month(12)->
     <<"декабря"/utf8>>.
 
-post_current_date() ->
+post_current_date(Feed) ->
     {_Year, Month, Day} = date(),
     DayBin = unicode:characters_to_binary(io_lib:format("~tp ", [Day])),
     MonthBin = russian_month(Month),
     RussianDate = <<DayBin/binary, MonthBin/binary>>,
     io:format("~tp~n", [RussianDate]),
-    frfbot:post(RussianDate).
+    frfbot:post(Feed, RussianDate).
