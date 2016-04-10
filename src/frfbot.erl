@@ -157,8 +157,6 @@ get_token(State) ->
     {ok, State#state{logged_in=true, token=Token}}.
 
 post(Feed, Post, State) ->
-    {ok, User} = application:get_env(frfbot, feed),
-    UserBin = list_to_binary(User),
     Token = State#state.token,
     Request = #{
         <<"post">> => #{
