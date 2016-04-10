@@ -8,9 +8,5 @@
                   stdlib
                  ]},
   {mod, { frfbot_app, []}},
-  {env, [
-        {feed, "<YOUR FEED HERE>"},
-        {password, "<YOUR PASSWORD HERE>"}
-        ]},
   {modules, [frfbot_app, frfbot]}
  ]}.
