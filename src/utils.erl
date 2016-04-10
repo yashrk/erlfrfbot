@@ -35,4 +35,4 @@ post_current_date(Feed) ->
 
 %% Usage: erlcron:at({7, 00, am}, fun(_Date, _Time) -> utils:habits_post() end).
 habits_post() ->
-    post_current_date(<<"habitsbot">>).
+    post_current_date(<<"habits">>).
