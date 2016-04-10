@@ -138,7 +138,7 @@ code_change(_OldVsn, State, _Extra) ->
 %%%===================================================================
 
 get_token(State) ->
-    {ok, Feed} = application:get_env(frfbot, feed),
+    {ok, User} = application:get_env(frfbot, user),
     {ok, Password} = application:get_env(frfbot, password),
     {ok, AuthResponse} = httpc:request(
         post,
@@ -146,7 +146,7 @@ get_token(State) ->
           "https://freefeed.net/v1/session",
           [],
           "application/x-www-form-urlencoded",
-          "username=" ++ Feed ++ "&password=" ++ Password
+          "username=" ++ User ++ "&password=" ++ Password
         },
         [],
         []
