@@ -3,3 +3,5 @@ rebar
 .rebar/*
 deps/*
 ebin/*
+rel/frfbot/*
+
