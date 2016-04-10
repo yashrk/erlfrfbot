@@ -31,8 +31,8 @@ post_current_date(Feed) ->
     DayBin = unicode:characters_to_binary(io_lib:format("~tp ", [Day])),
     MonthBin = russian_month(Month),
     RussianDate = <<DayBin/binary, MonthBin/binary>>,
-    io:format("~tp~n", [RussianDate]),
     frfbot:post(Feed, RussianDate).
 
+%% Usage: erlcron:at({7, 00, am}, fun(_Date, _Time) -> utils:habits_post() end).
 habits_post() ->
     post_current_date(<<"habitsbot">>).
