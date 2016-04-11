@@ -4,6 +4,7 @@
 
 %% API
 -export([start_link/0,
+         get_posts/1,
          login/0,
          post/2,
          is_logged_in/0
@@ -38,6 +39,9 @@ post(Feed, Text) ->
 
 is_logged_in() ->
     gen_server:call(?MODULE, {is_logged_in}).
+
+get_posts(Feed) ->
+    gen_server:call(?MODULE, {get_posts, Feed}).
 
 %%%===================================================================
 %%% gen_server callbacks
@@ -79,6 +83,9 @@ handle_call({post, Feed, Text}, _From, State) ->
     {reply, Status, State};
 handle_call({is_logged_in}, _From, State) ->
     {reply, State#state.logged_in, State};
+handle_call({get_posts, Feed}, _From, State) ->
+    Posts = get_posts(Feed, State),
+    {reply, Posts, State};
 handle_call(_Request, _From, State) ->
     {reply, unknown_command, State}.
 
@@ -178,3 +185,18 @@ post(Feed, Post, State) ->
         [],
         []
      ).
+
+get_posts(Feed, State) ->
+    Token = State#state.token,
+    {ok, {_StatusCode, _Headers, Data}} = httpc:request(
+        get,
+        {
+            "https://freefeed.net/v1/timelines/" ++ Feed,
+            [{"x-authentication-token", binary_to_list(Token)}]
+        },
+        [],
+        []
+     ),
+    Response = jiffy:decode(Data, [return_maps]),
+    #{<<"posts">> := Posts} = Response,
+    Posts.
