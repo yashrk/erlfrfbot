@@ -7,6 +7,7 @@
          get_posts/1,
          login/0,
          post/2,
+         comment/2,
          is_logged_in/0
         ]).
 
@@ -36,6 +37,9 @@ login() ->
 
 post(Feed, Text) ->
     gen_server:call(?MODULE, {post, Feed, Text}).
+
+comment(PostID, Text) ->
+    gen_server:call(?MODULE, {comment, PostID, Text}).
 
 is_logged_in() ->
     gen_server:call(?MODULE, {is_logged_in}).
@@ -81,6 +85,9 @@ handle_call({login}, _From, State) ->
     {reply, Status, NewState};
 handle_call({post, Feed, Text}, _From, State) ->
     Status = post(Feed, Text, State),
+    {reply, Status, State};
+handle_call({comment, PostID, Text}, _From, State) ->
+    Status = comment(PostID, Text, State),
     {reply, Status, State};
 handle_call({is_logged_in}, _From, State) ->
     {reply, State#state.logged_in, State};
@@ -201,3 +208,26 @@ get_posts(Feed, State) ->
     Response = jiffy:decode(Data, [return_maps]),
     #{<<"posts">> := Posts} = Response,
     Posts.
+
+comment(PostID, Text, State) ->
+    Token = State#state.token,
+    Request = #{
+        <<"comment">> => #{
+            <<"body">> => Text,
+            <<"postId">> => PostID
+        }
+    },
+    RequestJSON = jiffy:encode(Request),
+    io:format(RequestJSON),
+    {ok, {StatusCode, _Headers, Data}} = httpc:request(
+        post,
+        {
+            "https://freefeed.net/v1/comments/",
+            [{"x-authentication-token", binary_to_list(Token)}],
+            "application/json",
+            RequestJSON
+        },
+        [],
+        []
+    ),
+    {StatusCode, Data}.
