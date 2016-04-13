@@ -31,7 +31,7 @@ That's all. Now you have a ready to work Erlang release of erlfrfbot in `$PROJEC
             ]}
 ```
 
-Change `` and `` to your bot login and password. If you don't need scheduled tasks, comment out `erlcron` section, otherwise edit it.
+Change `<YOUR_LOGIN_HERE>` and `<YOUR_PASSWORD_HERE>` to your bot login and password. If you don't need scheduled tasks, comment out `erlcron` section, otherwise edit it.
 
 ## Usage ##
 
