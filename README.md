@@ -41,6 +41,12 @@ Go to `$RELEASE_DIR/bin`. Run
 
 ```
 ./frfbot start
+```
+
+Now your bot is (probably) up and running.
+
+If you need a console, type
+```
 ./frfbot attach
 ```
 
