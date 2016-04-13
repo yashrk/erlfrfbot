@@ -5,6 +5,8 @@
 ```
 git clone https://github.com/yashrk/erlfrfbot
 cd erlfrfbot
+wget https://github.com/rebar/rebar/wiki/rebar
+chmod +x rebar
 ./rebar compile
 cd rel
 vim files/sys.config # About config file see below
